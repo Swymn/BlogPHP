@@ -22,5 +22,9 @@
     ini_set("display_startup_errors", 1);
     error_reporting(E_ALL);
 
+    require_once("/Applications/XAMPP/xamppfiles/htdocs/blog/database/database.php");
+
+    $db = new DataBase("blog");
+
 ?>
 <?php include("navbar.php"); ?>
