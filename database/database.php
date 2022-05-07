@@ -29,18 +29,44 @@ class DataBase {
 
     public function addUser(string $username, string $email, string $password) {
 
-        $result = $this -> prepareRequest("INSERT INTO users(username, email, password) VALUES (:username, :email, :password)");
+        $result = $this -> prepareRequest("INSERT INTO users(username, email, password, roles) VALUES (:username, :email, :password, :roles)");
 
         $result -> bindValue(":username", $username, PDO::PARAM_STR);
         $result -> bindValue(":email", $email, PDO::PARAM_STR);
         $result -> bindValue(":password", $password, PDO::PARAM_STR);
+        $result -> bindValue(":roles", "[\"USER\"]", PDO::PARAM_STR);
 
         $result -> execute();
 
-        if ($result)
+        if ($result) {
+            session_start();
+
+            $_SESSION["user"] = [
+                "id" => $this -> dbh -> lastInsertId(),
+                "username" => $username,
+                "email" => $email,
+                "roles" => ["USER"]
+            ];
             return $result -> fetch();
+        }
         else
             die("Query FAILED");
+    }
+
+    public function getUser(string $username) {
+
+        $result = $this -> prepareRequest("SELECT * FROM users WHERE username=:username");
+
+        $result -> bindValue(":username", $username, PDO::PARAM_STR);
+
+        $result -> execute();
+
+        if ($result) {
+            return $result -> fetch();
+        } else {
+            die("Query FAILED");
+        }
+
     }
 
 }

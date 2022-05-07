@@ -1,8 +1,8 @@
 <?php 
-    include("partials/header.php"); 
+    $title = "Home";
+    include("partials/header.php");
 
     $hours = date("H");
-    $salutation = "";
 
     if ($hours > 0 && $hours < 12)
         $words = "Bonjour";
@@ -12,11 +12,13 @@
         $words = "Bon soir";
     else
         $words = "Bonne nuit";
+
+    $username = (isset($_SESSION["user"]) ? $_SESSION["user"]["username"] : "");
 ?>
 
 <div id="container">
 
-    <h1><?= $words; ?> ;)</h1>
+    <h1><?= $words ?> <?= $username ?></h1>
 
 </div>
 
